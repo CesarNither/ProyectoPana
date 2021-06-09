@@ -14,7 +14,7 @@ public class VentaPasaje {
 
     private ArrayList<String> pasajes = new ArrayList<>();
 
-    private ArrayList<Servicio> servicios;
+    private static ArrayList<Servicio> servicios;
     private String[] division;
     private ArrayList<Pasaje> registroVentas;
     static String comentario = "***************************************************";
@@ -75,11 +75,11 @@ public class VentaPasaje {
             }
 
             int indiceServicio = ingresarDestino();
-            Cliente c1 = new Cliente(ingresarPago(indiceServicio), ingresarRut(indiceServicio));
+            Cliente c1 = new Cliente(ingresarPago(indiceServicio), ingresarRut());
             mostrarAsientos(indiceServicio);
 
             int numeroAsiento = ingresarAsiento(indiceServicio);
-            servicios.get(indiceServicio).getBus().setAsiento(numeroAsiento - 1,true);
+            servicios.get(indiceServicio).getBus().setAsiento(numeroAsiento - 1, true);
             String contenido = leerTxt();
 
             division = contenido.split(",");
@@ -94,7 +94,7 @@ public class VentaPasaje {
             }
             registroVentas.add(p1);
             imprimirPasaje(p1, indiceServicio);
-            bw.write(p1.getId() + "-" + "Asiento :N°" + p1.getAsiento() + "-" + "Hora :" + p1.getHoraImpresion() + "-" + "Rut: " +" "+ p1.getRutCliente() + p1.getServicio() + "," + "\n");
+            bw.write(p1.getId() + "-" + "Asiento :N°" + p1.getAsiento() + "-" + "Hora :" + p1.getHoraImpresion() + "-" + "Rut: " + " " + p1.getRutCliente() + p1.getServicio() + "," + "\n");
             bw.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,22 +134,18 @@ public class VentaPasaje {
         return indiceServicio;
     }
 
-    public String ingresarRut(int indiceServicio) {
-        boolean largoCorrectoRut;
+    public static String ingresarRut() {
         String rut;
         do {
+            JOptionPane.showMessageDialog(null, "ingrese correctamente el rut : \"(12345678-9)\" sin puntos y con guion " + "\nSi es poseedor de un rut menor a 10.000.000-0 ingrese un 0 como primer digito", "Formato", -1);
             rut = JOptionPane.showInputDialog("Ingrese Rut del Cliente (12345678-9)\n" + "Ingrese 0 para salir del programa");
             salirPrograma(rut);
-            if (rut.length() == 10) {
-                return rut;
-            }
-            JOptionPane.showMessageDialog(null, "ingrese correctamente el rut : \"(12345678-9)\" sin puntos y con guion " + "\nSi es poseedor de un rut menor a 10.000.000-0 ingrese un 0 como primer digito", "Error", 0);
-        } while (largoCorrectoRut = true);
-        return "";
+        } while (rut.length() != 10);
+        return rut;
     }
 
     public int ingresarPago(int indiceServicio) {
-        int numeroUsuario, pago = -1;
+        int numeroUsuario, pago = 0;
         do {
             try {
                 numeroUsuario = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el monto con el que pagara\n" + "Ingrese 0 para salir del programa"));
@@ -158,18 +154,18 @@ public class VentaPasaje {
             } catch (Exception NumberFormatException) {
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             }
-        } while (pago == -1);
+        } while (pago == 0);
         return pago;
     }
 
-    public void salirPrograma(String numeroUsuario) {
+    public static void salirPrograma(String numeroUsuario) {
         if (numeroUsuario.equals("0")) {
             JOptionPane.showMessageDialog(null, "Gracias por utilizar nuestro programa", "Gracias", 1);
             System.exit(0);
         };
     }
 
-    public void salirPrograma(int numeroUsuario) {
+    public static void salirPrograma(int numeroUsuario) {
         if (numeroUsuario == 0) {
             JOptionPane.showMessageDialog(null, "Gracias por utilizar nuestro programa", "Gracias", 1);
             System.exit(0);
@@ -192,21 +188,13 @@ public class VentaPasaje {
         boolean validar = false;
         do {
             try {
-                numeroAsiento = Integer.parseInt(JOptionPane.showInputDialog("Ingresar N° de Asiento \n"
-                        + "Ingrese el numero 0 para salir del programa"));
+                numeroAsiento = Integer.parseInt(JOptionPane.showInputDialog("Ingresar N° de Asiento \n" + "Ingrese el numero 0 para salir del programa"));
                 salirPrograma(numeroAsiento);
-                if(validarAsiento(numeroAsiento, indiceServicio)){
+                if (validarAsiento(numeroAsiento, indiceServicio)) {
                     validar = true;
                 } else {
                     validar = invalidarAsiento();
                 }
-                /*if (numeroAsiento <= 0 || numeroAsiento > servicios.get(indiceServicio).getBus().getCantidadAsientos()) {
-                    validar = invalidarAsiento();
-                } else if (!servicios.get(indiceServicio).getBus().getAsientos()[numeroAsiento - 1]) {
-                    validar = invalidarAsiento();
-                } else {
-                    validar = true;
-                }*/
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -215,9 +203,9 @@ public class VentaPasaje {
         } while (!validar);
         return numeroAsiento;
     }
-    
-    public boolean validarAsiento(int asiento, int indice){
-        return !(asiento <= 0 || asiento > servicios.get(indice).getBus().getCantidadAsientos())||(!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
+
+    public boolean validarAsiento(int asiento, int indice) {
+        return !(asiento <= 0 || asiento > servicios.get(indice).getBus().getCantidadAsientos()) || (!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
     }
 
     public void imprimirPasaje(Pasaje p1, int indiceServicio) {
@@ -231,13 +219,13 @@ public class VentaPasaje {
         return false;
     }
 
-    public int calcular(Servicio servicio, int pago) {
+    public static int calcular(Servicio servicio, int pago) {
         if (servicio.getPrecioPasaje() <= pago) {
             JOptionPane.showMessageDialog(null, "VUELTO = " + (pago - servicio.getPrecioPasaje()), "Pago Recibido", -1);
             return (pago - servicio.getPrecioPasaje());
         }
         JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
-        return -1;
+        return 0;
     }
 
     public void mostrarVentas() {
@@ -254,7 +242,7 @@ public class VentaPasaje {
 
     public void verHorarios() {
         for (int i = 0; i < servicios.size(); i++) {
-              System.out.println((i + 1) + ".- " + servicios.get(i).getDestino() + "\n" + "Hora: " + servicios.get(i).getHoraSalida() + "\n" + "Precio pasaje: " + servicios.get(i).getPrecioPasaje());
+            System.out.println((i + 1) + ".- " + servicios.get(i).getDestino() + "\n" + "Hora: " + servicios.get(i).getHoraSalida() + "\n" + "Precio pasaje: " + servicios.get(i).getPrecioPasaje());
         }
     }
 
@@ -272,8 +260,7 @@ public class VentaPasaje {
         boolean ciclo;
         do {
             try {
-                indiceServicio = Integer.parseInt(JOptionPane.showInputDialog("Ingresar numero de Servicio\n"
-                        + "Ingrese el numero 0 para salir del programa"));
+                indiceServicio = Integer.parseInt(JOptionPane.showInputDialog("Ingresar numero de Servicio\n" + "Ingrese el numero 0 para salir del programa"));
                 salirPrograma(indiceServicio);
                 if (destino.equals("VILLARRICA") && indiceServicio > 0 && indiceServicio < 3) {
                     return indiceServicio - 1;
