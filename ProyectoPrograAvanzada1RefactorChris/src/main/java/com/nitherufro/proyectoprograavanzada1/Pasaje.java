@@ -7,10 +7,10 @@ public class Pasaje {
     private int id;
     private LocalTime horaImpresion;
     private String rutCliente;
-    private Asientos asiento;
+    private int asiento;
     private Servicio servicio;
 
-    public Pasaje(int id, String rutCliente, Asientos asiento, Servicio servicio) {
+    public Pasaje(int id, String rutCliente, int asiento, Servicio servicio) {
         this.id = id;
         this.rutCliente = rutCliente;
         this.horaImpresion = LocalTime.now();
@@ -42,11 +42,11 @@ public class Pasaje {
         this.rutCliente = rutCliente;
     }
 
-    public Asientos getAsiento() {
+    public int getAsiento() {
         return asiento;
     }
 
-    public void setAsiento(Asientos asiento) {
+    public void setAsiento(int asiento) {
         this.asiento = asiento;
     }
 

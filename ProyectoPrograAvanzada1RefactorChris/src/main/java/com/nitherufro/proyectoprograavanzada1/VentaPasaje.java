@@ -79,7 +79,7 @@ public class VentaPasaje {
             mostrarAsientos(indiceServicio);
 
             int numeroAsiento = ingresarAsiento(indiceServicio);
-            servicios.get(indiceServicio).getBus().getAsientos()[numeroAsiento - 1].setEstado(true);
+            servicios.get(indiceServicio).getBus().setAsiento(numeroAsiento - 1,true);
             String contenido = leerTxt();
 
             division = contenido.split(",");
@@ -88,13 +88,13 @@ public class VentaPasaje {
                 pasajes.add(division[i]);
             }
             int largo;
-            Pasaje p1 = new Pasaje(division.length - 1, c1.getRut(), servicios.get(indiceServicio).getBus().getAsientos()[numeroAsiento - 1], servicios.get(indiceServicio));
+            Pasaje p1 = new Pasaje(division.length - 1, c1.getRut(), numeroAsiento, servicios.get(indiceServicio));
             if (division.length == 0) {
                 largo = division.length + 2;
             }
             registroVentas.add(p1);
             imprimirPasaje(p1, indiceServicio);
-            bw.write(p1.getId() + "-" + "Asiento :" + p1.getAsiento() + "-" + "Hora :" + p1.getHoraImpresion() + "-" + "Rut: " + p1.getRutCliente() + p1.getServicio() + "," + "\n");
+            bw.write(p1.getId() + "-" + "Asiento :N°" + p1.getAsiento() + "-" + "Hora :" + p1.getHoraImpresion() + "-" + "Rut: " +" "+ p1.getRutCliente() + p1.getServicio() + "," + "\n");
             bw.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +181,7 @@ public class VentaPasaje {
         System.out.println("ASIENTOS DISPONIBLES");
         System.out.println("");
         for (int i = 0; i < servicios.get(indiceServicio).getBus().getAsientos().length; i++) {
-            if (!servicios.get(indiceServicio).getBus().getAsientos()[i].isEstado()) {
+            if (!servicios.get(indiceServicio).getBus().getAsientos()[i]) {
                 System.out.println(i + 1);
             }
         }
@@ -195,13 +195,18 @@ public class VentaPasaje {
                 numeroAsiento = Integer.parseInt(JOptionPane.showInputDialog("Ingresar N° de Asiento \n"
                         + "Ingrese el numero 0 para salir del programa"));
                 salirPrograma(numeroAsiento);
-                if (numeroAsiento <= 0 || numeroAsiento >= servicios.get(indiceServicio).getBus().getCantidadAsientos()) {
+                if(validarAsiento(numeroAsiento, indiceServicio)){
+                    validar = true;
+                } else {
                     validar = invalidarAsiento();
-                } else if (servicios.get(indiceServicio).getBus().getAsientos()[numeroAsiento - 1].isEstado()) {
+                }
+                /*if (numeroAsiento <= 0 || numeroAsiento > servicios.get(indiceServicio).getBus().getCantidadAsientos()) {
+                    validar = invalidarAsiento();
+                } else if (!servicios.get(indiceServicio).getBus().getAsientos()[numeroAsiento - 1]) {
                     validar = invalidarAsiento();
                 } else {
                     validar = true;
-                }
+                }*/
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -209,6 +214,10 @@ public class VentaPasaje {
             }
         } while (!validar);
         return numeroAsiento;
+    }
+    
+    public boolean validarAsiento(int asiento, int indice){
+        return !(asiento <= 0 || asiento > servicios.get(indice).getBus().getCantidadAsientos())||(!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
     }
 
     public void imprimirPasaje(Pasaje p1, int indiceServicio) {
@@ -233,7 +242,7 @@ public class VentaPasaje {
 
     public void mostrarVentas() {
         System.out.println(comentario);
-        System.out.println("  VENTAS  ");
+        System.out.println("  VENTAS  .");
         for (int i = 0; i < registroVentas.size(); i++) {
             if (i == 0) {
                 System.out.println("ID   hora de impresion     pago");
