@@ -30,6 +30,16 @@ public class Bus {
     public boolean[] getAsientos() {
         return asientos;
     }
+    
+    public boolean getAsiento(int asiento){
+        if(asiento<0||asiento>=asientos.length){
+            return true;
+        }
+        else {
+            return asientos[asiento];
+        }
+    
+    }
 
     public void setAsientos(boolean[] asientos) {
         this.asientos = asientos;

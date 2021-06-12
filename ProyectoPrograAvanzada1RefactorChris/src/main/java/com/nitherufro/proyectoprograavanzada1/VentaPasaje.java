@@ -97,7 +97,7 @@ public class VentaPasaje {
                 largo = division.length + 2;
             }
             registroVentas.add(p1);
-            imprimirPasaje(p1, indiceServicio);
+            imprimirPasaje(p1);
             bw.write(p1.getId() + "-" + "Asiento :N°" + p1.getAsiento() + "-" + "Hora :" + p1.getHoraImpresion() + "-" + "Rut: " + " " + p1.getRutCliente() + p1.getServicio() + "," + "\n");
             bw.close();
         } catch (Exception e) {
@@ -209,9 +209,11 @@ public class VentaPasaje {
     }
 
     public boolean validarAsiento(int asiento, int indice) {
-        return !(existeAsiento(asiento) || isAsientoCorrecto(asiento,  servicios.get(indice).getBus().getCantidadAsientos())) || (!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
+        return !servicios.get(indice).getBus().getAsiento(asiento - 1);
     }
     
+    
+    /*
     public boolean existeAsiento(int asiento){
         
         return asiento<=0;
@@ -219,14 +221,15 @@ public class VentaPasaje {
     
     public boolean isAsientoCorrecto(int asiento,int cantidadAsientos){
         
-        return asiento> cantidadAsientos;
+        return !(asiento>cantidadAsientos);
         
     }
+    */
 
-    public void imprimirPasaje(Pasaje p1, int indiceServicio) {
+    public void imprimirPasaje(Pasaje p1) {
         System.out.println(p1);
-        System.out.println("Destino =         " + servicios.get(indiceServicio).getDestino());
-        System.out.println("Hora salida =     " + servicios.get(indiceServicio).getHoraSalida());
+        System.out.println("Destino =         " + p1.getServicio().getDestino());
+        System.out.println("Hora salida =     " + p1.getServicio().getHoraSalida());
     }
 
     public boolean invalidarAsiento() {
