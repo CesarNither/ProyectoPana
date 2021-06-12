@@ -23,6 +23,10 @@ public class VentaPasaje {
         registroVentas = new ArrayList<>();
         servicios = servicio;
     }
+    public VentaPasaje() {
+        
+    }
+
 
     public void menu() {
         System.out.println(comentario);
@@ -205,7 +209,18 @@ public class VentaPasaje {
     }
 
     public boolean validarAsiento(int asiento, int indice) {
-        return !(asiento <= 0 || asiento > servicios.get(indice).getBus().getCantidadAsientos()) || (!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
+        return !(existeAsiento(asiento) || isAsientoCorrecto(asiento,  servicios.get(indice).getBus().getCantidadAsientos())) || (!servicios.get(indice).getBus().getAsientos()[asiento - 1]);
+    }
+    
+    public boolean existeAsiento(int asiento){
+        
+        return asiento<=0;
+    }
+    
+    public boolean isAsientoCorrecto(int asiento,int cantidadAsientos){
+        
+        return asiento> cantidadAsientos;
+        
     }
 
     public void imprimirPasaje(Pasaje p1, int indiceServicio) {
@@ -218,7 +233,7 @@ public class VentaPasaje {
         JOptionPane.showMessageDialog(null, "ASIENTO NO DISPONIBLE " + "\nIngrese asiento nuevamente", "Error", 0);
         return false;
     }
-
+    // version pruebas cesar
     public static int calcular(Servicio servicio, int pago) {
         if (servicio.getPrecioPasaje() <= pago) {
             JOptionPane.showMessageDialog(null, "VUELTO = " + (pago - servicio.getPrecioPasaje()), "Pago Recibido", -1);
@@ -227,6 +242,31 @@ public class VentaPasaje {
         JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
         return 0;
     }
+    /*
+    Version alternativa, pruebas de giovanni
+    public int calcular(Servicio servicio, int pago) {
+        if (isVuelto(servicio.getPrecioPasaje(), pago)) {
+            int vuelto=vuelto(servicio.getPrecioPasaje(), pago);
+            JOptionPane.showMessageDialog(null, "VUELTO = " + (vuelto), "Pago Recibido", -1);
+            return (vuelto);
+            
+        }
+        JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
+        return -1;
+        
+    }
+    
+    public boolean isVuelto(int precioPasaje, int pago){
+        
+        return precioPasaje <= pago;
+    }
+    
+    public int vuelto(int precioPasaje, int pago){
+        
+        return pago-precioPasaje;
+        
+    }
+*/
 
     public void mostrarVentas() {
         System.out.println(comentario);
