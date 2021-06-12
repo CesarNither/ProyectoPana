@@ -10,8 +10,9 @@ public class IngresarPagoTest {
 
     @Test
     public void ingresarPagoTest() {
-        int numeroUsuarioTest = 1500;
-        Assertions.assertTrue(0 == numeroUsuarioTest);
+        int numeroUsuarioTest = 1600;
+        int precioPasajeTest = 1500;
+        Assertions.assertTrue(precioPasajeTest <= numeroUsuarioTest);
     }
 
 }

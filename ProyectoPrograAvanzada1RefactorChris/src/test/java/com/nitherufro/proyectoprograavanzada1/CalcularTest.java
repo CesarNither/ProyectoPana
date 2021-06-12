@@ -18,13 +18,13 @@ public class CalcularTest {
     public void testPagoExitoso() {
         int pagoTest = 2000;
         int vueltoTest = calcular(servicio,pagoTest);
-        Assertions.assertTrue(vueltoTest > 0);      
+        Assertions.assertTrue(vueltoTest > -1);      
     }
 
     @Test
     public void testPagoFallido() {
         int pagoTest = 1000;
         int vueltoTest = calcular(servicio,pagoTest);
-        Assertions.assertTrue(vueltoTest == 0);
+        Assertions.assertTrue(vueltoTest == -1);
     }
 }

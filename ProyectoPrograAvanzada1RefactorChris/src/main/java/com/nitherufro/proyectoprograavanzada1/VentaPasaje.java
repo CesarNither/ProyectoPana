@@ -30,7 +30,7 @@ public class VentaPasaje {
 
     public void menu() {
         System.out.println(comentario);
-        int opcionUsuario = -404;
+        int opcionUsuario = -1;
         do {
             try {
                 opcionUsuario = Integer.parseInt(JOptionPane.showInputDialog(null, "------MENU------\n"
@@ -158,7 +158,7 @@ public class VentaPasaje {
             } catch (Exception NumberFormatException) {
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             }
-        } while (pago == 0);
+        } while (pago == -1);
         return pago;
     }
 
@@ -243,7 +243,7 @@ public class VentaPasaje {
             return (pago - servicio.getPrecioPasaje());
         }
         JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
-        return 0;
+        return -1;
     }
     /*
     Version alternativa, pruebas de giovanni

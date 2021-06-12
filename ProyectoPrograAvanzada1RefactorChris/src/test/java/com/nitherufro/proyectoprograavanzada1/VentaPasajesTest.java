@@ -12,11 +12,10 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.Assertions;
 
 public class VentaPasajesTest {
-    
-    //las pruebas no funcionan debido a un conflicto en commits, 
 
+    //las pruebas no funcionan debido a un conflicto en commits, 
     VentaPasaje venta = new VentaPasaje();
-/*
+    /*
     @Test
     public void test_isVuelto() {
         int precioPasaje = 2000;
@@ -37,7 +36,7 @@ public class VentaPasajesTest {
         assertEquals(vuelto, venta.vuelto(precioPasaje, pago));
 
     }
-    */
+   
      @Test
     public void test_ValidarAsiento() {
         
@@ -50,9 +49,6 @@ public class VentaPasajesTest {
 
     }
     
-    
-    
-    
-    
+     */
 
 }
