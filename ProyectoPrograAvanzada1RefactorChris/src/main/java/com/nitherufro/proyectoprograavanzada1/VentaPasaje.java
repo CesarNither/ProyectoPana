@@ -1,5 +1,8 @@
 package com.nitherufro.proyectoprograavanzada1;
 
+import static com.nitherufro.proyectoprograavanzada1.Utilidades.FileLogger;
+import static com.nitherufro.proyectoprograavanzada1.Utilidades.GenerarLog;
+import static com.nitherufro.proyectoprograavanzada1.Utilidades.nombreLogger;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
@@ -19,8 +23,9 @@ public class VentaPasaje {
     private String[] division;
     private ArrayList<Pasaje> registroVentas;
     static String comentario = "***************************************************";
-    static String fecha = Utilidades.getTimestamp();
+    static String fecha;
     static Logger registro;
+    private BufferedWriter buffered;
 
     public VentaPasaje(ArrayList<Servicio> servicio) {
         registroVentas = new ArrayList<>();
@@ -28,19 +33,22 @@ public class VentaPasaje {
     }
 
     public VentaPasaje() {
-
     }
 
-    public Logger crearLog(String nombre) {
-
+    public static Logger crearLog(FileHandler fileLog) {
         try {
-            registro = Utilidades.GenerarLog(nombre, fecha);
+            registro = GenerarLog(nombreLogger, fileLog);
         } catch (IOException e) {
-
             e.printStackTrace();
         }
-
         return registro;
+    }
+
+    public static FileHandler log() throws IOException {
+        fecha = Utilidades.getTimestamp();
+        FileHandler fileLog = FileLogger(fecha);
+        registro = crearLog(fileLog);
+        return fileLog;
     }
 
     public void menu() {
@@ -94,7 +102,9 @@ public class VentaPasaje {
             }
 
             int indiceServicio = ingresarDestino();
-            Cliente c1 = new Cliente(ingresarPago(indiceServicio), ingresarRut());
+            nombreLogger = "ingresarRut";
+            String rut = ingresarRut();
+            Cliente c1 = new Cliente(ingresarPago(indiceServicio), rut);
             mostrarAsientos(indiceServicio);
 
             int numeroAsiento = ingresarAsiento(indiceServicio);
@@ -120,12 +130,13 @@ public class VentaPasaje {
         }
     }
 
-    public int ingresarDestino() {
-        this.registro = crearLog("ingresarDestino");
+    public int ingresarDestino() throws IOException {
         int destino = -1;
         int indiceServicio = 0;
+        nombreLogger = "ingresarDestino";
         do {
             try {
+
                 destino = Integer.parseInt(JOptionPane.showInputDialog(null, "------Ingrese un Destino------\n"
                         + "1: Villarrica\n"
                         + "2: Temuco\n"
@@ -145,24 +156,36 @@ public class VentaPasaje {
                         salirPrograma(destino);
                     default:
                         JOptionPane.showMessageDialog(null, "Error: ingrese un destino valido", "Error", 0);
+                        FileHandler fileLog = log();
                         registro.warning("Metodo ingresarDestino  \n Metodo recibio un valor no autorizado '" + destino + "'");
+                        fileLog.close();
                         break;
                 }
             } catch (Exception NumberFormatException) {
-                registro.severe("Metodo ingresarDestino ERROR NumberFormatException \n Metodo recibio un valor no autorizado  '" + destino + "' causando una excepcion");
+                FileHandler fileLog = log();
+                registro.severe("Metodo ingresarDestino ERROR NumberFormatException \n Metodo recibio un valor no autorizado causando una excepcion");
+                fileLog.close();
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             }
-        } while (destino < 0 || destino > 4);
+        } while (destino < 0 || destino > 3);
         return indiceServicio;
     }
 
-    public static String ingresarRut() {
+    public static String ingresarRut() throws IOException {
         String rut;
         do {
             JOptionPane.showMessageDialog(null, "ingrese correctamente el rut : \"(12345678-9)\" sin puntos y con guion " + "\nSi es poseedor de un rut menor a 10.000.000-0 ingrese un 0 como primer digito", "Formato", -1);
             rut = JOptionPane.showInputDialog("Ingrese Rut del Cliente (12345678-9)\n" + "Ingrese 0 para salir del programa");
             salirPrograma(rut);
+            if (rut.length() != 10) {
+                FileHandler fileLog = log();
+                registro.warning("Metodo ingresarRut, usuario ingreso un rut no valido, rut del cliente: '" + rut + "'");
+                fileLog.close();
+            }
         } while (rut.length() != 10);
+        FileHandler fileLog = log();
+        registro.info("Metodo ingresarRut, cumplido satisfactoriamente, rut del cliente: '" + rut + "'");
+        fileLog.close();
         return rut;
     }
 
@@ -309,14 +332,12 @@ public class VentaPasaje {
     }
 
     public void verHorarios(String destino) {
-  
+
         System.out.println(destino);
 
         for (int i = 0; i < servicios.size(); i++) {
             if (servicios.get(i).getDestino().equalsIgnoreCase(destino)) {
                 System.out.println((i + 1) + ".- " + servicios.get(i).getDestino() + "\n" + "Hora: " + servicios.get(i).getHoraSalida() + "\n" + "Precio pasaje: " + servicios.get(i).getPrecioPasaje());
-             
-           
 
             }
         }

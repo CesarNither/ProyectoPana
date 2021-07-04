@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.nitherufro.proyectoprograavanzada1;
 
 import java.io.IOException;
@@ -12,27 +8,28 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**
- *
- * @author chris
- */
+
 public class Utilidades {
+    
+    public static String nombreLogger;
     
     public static String getTimestamp(){
         String fecha;
-        return fecha = DateTimeFormatter.ofPattern("yyyMMddHHmm").format(LocalDateTime.now());
+        return fecha = DateTimeFormatter.ofPattern("yyyMMddHHmmssSSS").format(LocalDateTime.now());
         
     }
     
-    public static Logger GenerarLog(String nombre, String time) throws IOException {
-      
-        Logger logger = Logger.getLogger(nombre);
-        FileHandler fileLog = new FileHandler("./"+time+" "+nombre+".log",true);
+    public static FileHandler FileLogger(String time) throws IOException {
+        FileHandler fileLog = new FileHandler("./" + time + " " + nombreLogger + ".log");
+        return fileLog;
+    }
+
+    public static Logger GenerarLog(String nombre,FileHandler fileLog) throws IOException {
+        Logger logger = Logger.getLogger(nombreLogger);
         logger.addHandler(fileLog);
         SimpleFormatter formatter = new SimpleFormatter();
         fileLog.setFormatter(formatter);
         return logger;
-        
-    }   
+    }
     
 }
