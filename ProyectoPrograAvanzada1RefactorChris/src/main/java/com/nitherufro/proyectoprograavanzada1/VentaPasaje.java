@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
 public class VentaPasaje {
 
     private ArrayList<String> pasajes = new ArrayList<>();
-
     private static ArrayList<Servicio> servicios;
     private String[] division;
     private ArrayList<Pasaje> registroVentas;
@@ -52,7 +51,9 @@ public class VentaPasaje {
         return fileLog;
     }
 
-    public void menu() {
+    public void menu() throws IOException {
+        nombreLogger = "menu";
+        FileHandler fileLog = log();
         System.out.println(comentario);
         int opcionUsuario = -1;
         do {
@@ -64,12 +65,18 @@ public class VentaPasaje {
                         + "0: Salir..."));
                 switch (opcionUsuario) {
                     case 1:
+                        registro.info("Menu, Opcion vender pasaje seleccionada");
+                        fileLog.close();
                         venderPasaje();
                         break;
                     case 2:
+                        registro.info("Menu, Opcion vender pasaje seleccionada");
+                        fileLog.close();
                         verHorarios();
                         break;
                     case 3:
+                        registro.info("Menu, Opcion vender pasaje seleccionada");
+                        fileLog.close();
                         mostrarVentas();
                         String cont = leerTxt();
                         String[] separar = cont.split(",");
@@ -78,8 +85,12 @@ public class VentaPasaje {
                         }
                         break;
                     case 0:
+                        registro.info("Usuario se ha retirado de la aplicacion");
+                        fileLog.close();
                         salirPrograma(opcionUsuario);
                     default:
+                        registro.warning("Metodo menu, Opcion invalida seleccionada");
+                        fileLog.close();
                         JOptionPane.showMessageDialog(null, "¡Opcion no valida ingrese de nuevo!", "Error", 0);
                         break;
                 }
