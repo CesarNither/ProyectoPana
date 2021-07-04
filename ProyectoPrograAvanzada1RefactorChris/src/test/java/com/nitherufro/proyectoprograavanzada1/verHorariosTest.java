@@ -5,6 +5,8 @@
  */
 package com.nitherufro.proyectoprograavanzada1;
 
+import java.io.IOException;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -14,17 +16,37 @@ import org.junit.jupiter.api.Assertions;
  * @author chris
  */
 public class verHorariosTest {
-    
+
+    static String fecha = Utilidades.getTimestamp();
+    static Logger registro;
+
+    static {
+        try {
+            registro = Utilidades.GenerarLog("Pruebas verHorario", fecha);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
     @Test
     public void TestVerHorariosEspecifico() {
+
         String destino = "VILLARICA";
-        String destinacion = JOptionPane.showInputDialog("Ingrese VILLARRICA para pasar la prueba\n");
+        String destinacion = JOptionPane.showInputDialog("Ingrese VILLARRICA para pasar la prueba\n", "VILLARRICA");
 
-        for (int i = 0; i < 2; i++) {
-            if (destino.equalsIgnoreCase(destinacion)) {
-                System.out.println((i + 1) + ".- 1 \n" + "Hora: 10:30 \n" + "Precio pasaje: $3500");
+        if (destino.equalsIgnoreCase(destinacion)) {
+            System.out.println((1) + ".- 1 \n" + "Hora: 10:30 \n" + "Precio pasaje: $3500");
 
-            }
+        }
+
+        if (destinacion.equals("VILLARRICA")) {
+            registro.info("Prueba TestVerHorariosEspecifico Iniciado \n Prueba Exitosa entrada coincide con la esperada");
+
+        } else {
+            registro.warning("Prueba TestVerHorariosEspecifico ERROR \n Prueba Fallada debido a que la informacion indexada no coincide con la esperada");
+
         }
         Assertions.assertEquals("VILLARRICA", destinacion);
     }
@@ -32,13 +54,15 @@ public class verHorariosTest {
     @Test
     public void TestVerHorariosGeneral() {
 
-        String destinacion = JOptionPane.showInputDialog("Ingrese VILLARRICA para pasar la prueba\n");
+        String destinacion = JOptionPane.showInputDialog("Ingrese VILLARRICA para pasar la prueba\n", "VILLARRICA");
 
-        for (int i = 0; i < 3; i++) {
+        System.out.println(1 + ".- \n" + destinacion + "Hora: 10:30 \n" + "Precio pasaje: $3500");
 
-            System.out.println(i  + ".- \n" + destinacion + "Hora: 10:30 \n" + "Precio pasaje: $3500");
-            System.out.println(i + ".-\n" + destinacion + "Hora: 11:30 \n" + "Precio pasaje: $4500");
-            System.out.println(i + ".-\n" + destinacion + "Hora: 12:30 \n" + "Precio pasaje: $3000");
+        if (destinacion.equals("VILLARRICA")) {
+            registro.info("Prueba TestVerHorariosEspecifico Iniciado \n Prueba Exitosa entrada coincide con la esperada");
+
+        } else {
+            registro.warning("Prueba TestVerHorariosEspecifico Iniciado \n Prueba Fallada debido a que la informacion indexada no coincide con la esperada");
 
         }
         Assertions.assertEquals("VILLARRICA", destinacion);

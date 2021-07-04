@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class VentaPasaje {
@@ -18,15 +19,29 @@ public class VentaPasaje {
     private String[] division;
     private ArrayList<Pasaje> registroVentas;
     static String comentario = "***************************************************";
+    static String fecha = Utilidades.getTimestamp();
+    static Logger registro;
 
     public VentaPasaje(ArrayList<Servicio> servicio) {
         registroVentas = new ArrayList<>();
         servicios = servicio;
     }
+
     public VentaPasaje() {
-        
+
     }
 
+    public Logger crearLog(String nombre) {
+
+        try {
+            registro = Utilidades.GenerarLog(nombre, fecha);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return registro;
+    }
 
     public void menu() {
         System.out.println(comentario);
@@ -106,6 +121,7 @@ public class VentaPasaje {
     }
 
     public int ingresarDestino() {
+        this.registro = crearLog("ingresarDestino");
         int destino = -1;
         int indiceServicio = 0;
         do {
@@ -129,9 +145,11 @@ public class VentaPasaje {
                         salirPrograma(destino);
                     default:
                         JOptionPane.showMessageDialog(null, "Error: ingrese un destino valido", "Error", 0);
+                        registro.warning("Metodo ingresarDestino  \n Metodo recibio un valor no autorizado '" + destino + "'");
                         break;
                 }
             } catch (Exception NumberFormatException) {
+                registro.severe("Metodo ingresarDestino ERROR NumberFormatException \n Metodo recibio un valor no autorizado  '" + destino + "' causando una excepcion");
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un caracter numerico", "Error", 0);
             }
         } while (destino < 0 || destino > 4);
@@ -211,8 +229,7 @@ public class VentaPasaje {
     public boolean validarAsiento(int asiento, int indice) {
         return !servicios.get(indice).getBus().getAsiento(asiento - 1);
     }
-    
-    
+
     /*
     public boolean existeAsiento(int asiento){
         
@@ -224,8 +241,7 @@ public class VentaPasaje {
         return !(asiento>cantidadAsientos);
         
     }
-    */
-
+     */
     public void imprimirPasaje(Pasaje p1) {
         System.out.println(p1);
         System.out.println("Destino =         " + p1.getServicio().getDestino());
@@ -236,6 +252,7 @@ public class VentaPasaje {
         JOptionPane.showMessageDialog(null, "ASIENTO NO DISPONIBLE " + "\nIngrese asiento nuevamente", "Error", 0);
         return false;
     }
+
     // version pruebas cesar
     public static int calcular(Servicio servicio, int pago) {
         if (servicio.getPrecioPasaje() <= pago) {
@@ -245,6 +262,7 @@ public class VentaPasaje {
         JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
         return -1;
     }
+
     /*
     Version alternativa, pruebas de giovanni
     public int calcular(Servicio servicio, int pago) {
@@ -269,8 +287,7 @@ public class VentaPasaje {
         return pago-precioPasaje;
         
     }
-*/
-
+     */
     public void mostrarVentas() {
         System.out.println(comentario);
         System.out.println("  VENTAS  .");
@@ -283,16 +300,24 @@ public class VentaPasaje {
         }
     }
 
-    public void verHorarios() {
+    public static void verHorarios() {
+
         for (int i = 0; i < servicios.size(); i++) {
             System.out.println((i + 1) + ".- " + servicios.get(i).getDestino() + "\n" + "Hora: " + servicios.get(i).getHoraSalida() + "\n" + "Precio pasaje: " + servicios.get(i).getPrecioPasaje());
         }
+
     }
 
     public void verHorarios(String destino) {
+  
+        System.out.println(destino);
+
         for (int i = 0; i < servicios.size(); i++) {
             if (servicios.get(i).getDestino().equalsIgnoreCase(destino)) {
                 System.out.println((i + 1) + ".- " + servicios.get(i).getDestino() + "\n" + "Hora: " + servicios.get(i).getHoraSalida() + "\n" + "Precio pasaje: " + servicios.get(i).getPrecioPasaje());
+             
+           
+
             }
         }
     }
