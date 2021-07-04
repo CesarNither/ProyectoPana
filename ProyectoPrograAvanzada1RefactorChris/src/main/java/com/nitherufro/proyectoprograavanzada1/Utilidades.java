@@ -14,13 +14,12 @@ public class Utilidades {
     public static String nombreLogger;
     
     public static String getTimestamp(){
-        String fecha;
-        return fecha = DateTimeFormatter.ofPattern("yyy-MM-dd").format(LocalDateTime.now());
+        return DateTimeFormatter.ofPattern("yyy-MM-dd HH-mm-ss-SSS").format(LocalDateTime.now());
         
     }
     
-    public static FileHandler FileLogger(String time) throws IOException {
-        FileHandler fileLog = new FileHandler("./" + time + " " + nombreLogger + ".log", 10 * 1024 * 1024, 10);
+    public static FileHandler FileLogger() throws IOException {
+        FileHandler fileLog = new FileHandler("./"+ nombreLogger + ".log", 10 * 1024 * 1024, 10);
         return fileLog;
     }
 

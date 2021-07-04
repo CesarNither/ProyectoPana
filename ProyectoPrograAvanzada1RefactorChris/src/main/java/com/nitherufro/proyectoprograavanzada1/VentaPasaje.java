@@ -47,7 +47,7 @@ public class VentaPasaje {
 
     public static FileHandler log() throws IOException {
         fecha = Utilidades.getTimestamp();
-        FileHandler fileLog = FileLogger(fecha);
+        FileHandler fileLog = FileLogger();
         registro = crearLog(fileLog);
         return fileLog;
     }

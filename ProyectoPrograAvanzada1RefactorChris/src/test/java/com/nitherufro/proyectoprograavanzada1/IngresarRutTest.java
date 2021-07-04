@@ -20,7 +20,7 @@ public class IngresarRutTest {
         try {
             nombreLogger = "Prueba IngresarRutTest";
             fecha = Utilidades.getTimestamp();
-            FileHandler fileLog = FileLogger(fecha);
+            FileHandler fileLog = FileLogger();
             registro = crearLog(fileLog);
         } catch (IOException e) {
             e.printStackTrace();
