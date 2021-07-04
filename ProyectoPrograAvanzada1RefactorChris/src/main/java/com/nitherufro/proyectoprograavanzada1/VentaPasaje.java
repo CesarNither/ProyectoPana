@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 public class VentaPasaje {
@@ -279,9 +280,42 @@ public class VentaPasaje {
     // version pruebas cesar
     public static int calcular(Servicio servicio, int pago) {
         if (servicio.getPrecioPasaje() <= pago) {
+             try {
+                Log myLog = new Log("./log.txt");
             JOptionPane.showMessageDialog(null, "VUELTO = " + (pago - servicio.getPrecioPasaje()), "Pago Recibido", -1);
+             myLog.addLine("Se ha generado un vuelto del pago de un pasaje correctamente");
+
+                String[] lines = myLog.getLines();
+
+                for (int i = 0; i < lines.length; i++) {
+                    System.out.println(lines[i]);
+                }
+
+                myLog.resetLog();
+
             return (pago - servicio.getPrecioPasaje());
+            
+           
+            } catch (IOException ex) {
+                Logger.getLogger(VentaPasaje.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        try {
+            
+                Log myLog = new Log("./log.txt");
+                   myLog.addLine("Se ha generado un vuelto del pago de un pasaje INCORRECTAMENTE");
+                 String[] lines = myLog.getLines();
+
+                for (int i = 0; i < lines.length; i++) {
+                    System.out.println(lines[i]);
+                }
+
+                myLog.resetLog();
+        
+     
+        } catch (IOException ex) {
+                Logger.getLogger(VentaPasaje.class.getName()).log(Level.SEVERE, null, ex);
+            }
         JOptionPane.showMessageDialog(null, "PAGO INSUFICIENTE" + "\nINGRESE OTRO MONTO", "Error", 0);
         return -1;
     }
@@ -349,16 +383,35 @@ public class VentaPasaje {
         boolean ciclo;
         do {
             try {
+                try {
+                    Log myLog = new Log("./log.txt");
                 indiceServicio = Integer.parseInt(JOptionPane.showInputDialog("Ingresar numero de Servicio\n" + "Ingrese el numero 0 para salir del programa"));
                 salirPrograma(indiceServicio);
                 if (destino.equals("VILLARRICA") && indiceServicio > 0 && indiceServicio < 3) {
-                    return indiceServicio - 1;
+                     myLog.addLine("Se ha ingresado un numero de servicio correctamente");
+                      return indiceServicio - 1;
                 }
+                   
+                
                 if (destino.equals("TEMUCO") && indiceServicio > 2 && indiceServicio < 5) {
+                     myLog.addLine("Se ha ingresado un numero de servicio correctamente");
                     return indiceServicio - 1;
                 }
                 if (destino.equals("SANTIAGO") && indiceServicio > 4 && indiceServicio < 7) {
+                     myLog.addLine("Se ha ingresado un numero de servicio correctamente");
                     return indiceServicio - 1;
+                }
+                myLog.addLine("Se ha ingresado un numero de servicio incorrecto");
+                    String[] lines = myLog.getLines();
+
+                    for (int i = 0; i < lines.length; i++) {
+                        System.out.println(lines[i]);
+                    }
+
+                    myLog.resetLog();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(VentaPasaje.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(null, "Error: Ingrese un destino valido", "Error", 0);
             } catch (Exception NumberFormatException) {
@@ -366,7 +419,7 @@ public class VentaPasaje {
             }
         } while (ciclo = true);
         return 0;
-    }
+}
 
     public String leerTxt() {
         try {

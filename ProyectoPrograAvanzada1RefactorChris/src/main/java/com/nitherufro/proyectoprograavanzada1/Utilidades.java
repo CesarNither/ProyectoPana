@@ -15,7 +15,7 @@ public class Utilidades {
     
     public static String getTimestamp(){
         String fecha;
-        return fecha = DateTimeFormatter.ofPattern("yyyMMddHHmmssSSS").format(LocalDateTime.now());
+        return fecha = DateTimeFormatter.ofPattern("yyy-MM-dd HH-mm-ss-SSS").format(LocalDateTime.now());
         
     }
     
