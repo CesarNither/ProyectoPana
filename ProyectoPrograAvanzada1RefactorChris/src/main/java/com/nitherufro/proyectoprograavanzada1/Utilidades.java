@@ -15,12 +15,12 @@ public class Utilidades {
     
     public static String getTimestamp(){
         String fecha;
-        return fecha = DateTimeFormatter.ofPattern("yyy-MM-dd HH-mm-ss-SSS").format(LocalDateTime.now());
+        return fecha = DateTimeFormatter.ofPattern("yyy-MM-dd").format(LocalDateTime.now());
         
     }
     
     public static FileHandler FileLogger(String time) throws IOException {
-        FileHandler fileLog = new FileHandler("./" + time + " " + nombreLogger + ".log");
+        FileHandler fileLog = new FileHandler("./" + time + " " + nombreLogger + ".log", 10 * 1024 * 1024, 10);
         return fileLog;
     }
 

@@ -174,17 +174,16 @@ public class VentaPasaje {
 
     public static String ingresarRut() throws IOException {
         String rut;
+        FileHandler fileLog = log();
         do {
             JOptionPane.showMessageDialog(null, "ingrese correctamente el rut : \"(12345678-9)\" sin puntos y con guion " + "\nSi es poseedor de un rut menor a 10.000.000-0 ingrese un 0 como primer digito", "Formato", -1);
             rut = JOptionPane.showInputDialog("Ingrese Rut del Cliente (12345678-9)\n" + "Ingrese 0 para salir del programa");
             salirPrograma(rut);
             if (rut.length() != 10) {
-                FileHandler fileLog = log();
                 registro.warning("Metodo ingresarRut, usuario ingreso un rut no valido, rut del cliente: '" + rut + "'");
                 fileLog.close();
             }
         } while (rut.length() != 10);
-        FileHandler fileLog = log();
         registro.info("Metodo ingresarRut, cumplido satisfactoriamente, rut del cliente: '" + rut + "'");
         fileLog.close();
         return rut;
@@ -391,8 +390,6 @@ public class VentaPasaje {
                      myLog.addLine("Se ha ingresado un numero de servicio correctamente");
                       return indiceServicio - 1;
                 }
-                   
-                
                 if (destino.equals("TEMUCO") && indiceServicio > 2 && indiceServicio < 5) {
                      myLog.addLine("Se ha ingresado un numero de servicio correctamente");
                     return indiceServicio - 1;
