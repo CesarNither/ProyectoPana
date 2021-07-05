@@ -1,7 +1,5 @@
 package com.nitherufro.proyectoprograavanzada1;
 
-import static com.nitherufro.proyectoprograavanzada1.Utilidades.FileLogger;
-import static com.nitherufro.proyectoprograavanzada1.Utilidades.GenerarLog;
 import static com.nitherufro.proyectoprograavanzada1.Utilidades.nombreLogger;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,31 +22,18 @@ public class VentaPasaje {
     private String[] division;
     private ArrayList<Pasaje> registroVentas;
     static String comentario = "***************************************************";
-    static String fecha;
     static Logger registro;
-    private BufferedWriter buffered;
 
     public VentaPasaje(ArrayList<Servicio> servicio) {
         registroVentas = new ArrayList<>();
         servicios = servicio;
     }
 
-    public VentaPasaje() {
-    }
-
-    public static Logger crearLog(FileHandler fileLog) {
-        try {
-            registro = GenerarLog(nombreLogger, fileLog);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return registro;
-    }
+    public VentaPasaje() {}
 
     public static FileHandler log() throws IOException {
-        fecha = Utilidades.getTimestamp();
-        FileHandler fileLog = FileLogger();
-        registro = crearLog(fileLog);
+        FileHandler fileLog = Utilidades.FileLogger();
+        registro = Utilidades.GenerarLog(fileLog);
         return fileLog;
     }
 
@@ -137,7 +122,6 @@ public class VentaPasaje {
         nombreLogger = "ingresarDestino";
         do {
             try {
-
                 destino = Integer.parseInt(JOptionPane.showInputDialog(null, "------Ingrese un Destino------\n"
                         + "1: Villarrica\n"
                         + "2: Temuco\n"
@@ -173,17 +157,19 @@ public class VentaPasaje {
     }
 
     public static String ingresarRut() throws IOException {
-        String rut;
-        FileHandler fileLog = log();
+        String rut;        
         do {
             JOptionPane.showMessageDialog(null, "ingrese correctamente el rut : \"(12345678-9)\" sin puntos y con guion " + "\nSi es poseedor de un rut menor a 10.000.000-0 ingrese un 0 como primer digito", "Formato", -1);
             rut = JOptionPane.showInputDialog("Ingrese Rut del Cliente (12345678-9)\n" + "Ingrese 0 para salir del programa");
             salirPrograma(rut);
+            System.out.println(rut);
             if (rut.length() != 10) {
+                FileHandler fileLog = log();
                 registro.warning("Metodo ingresarRut, usuario ingreso un rut no valido, rut del cliente: '" + rut + "'");
                 fileLog.close();
             }
         } while (rut.length() != 10);
+        FileHandler fileLog = log();
         registro.info("Metodo ingresarRut, cumplido satisfactoriamente, rut del cliente: '" + rut + "'");
         fileLog.close();
         return rut;

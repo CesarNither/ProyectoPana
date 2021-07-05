@@ -19,16 +19,15 @@ public class Utilidades {
     }
     
     public static FileHandler FileLogger() throws IOException {
-        FileHandler fileLog = new FileHandler("./"+ nombreLogger + ".log", 10 * 1024 * 1024, 10);
+        FileHandler fileLog = new FileHandler("./"+ nombreLogger + ".log", 10 * 1024 * 1024, 12);
         return fileLog;
     }
 
-    public static Logger GenerarLog(String nombre,FileHandler fileLog) throws IOException {
+    public static Logger GenerarLog(FileHandler fileLog) throws IOException {
         Logger logger = Logger.getLogger(nombreLogger);
         logger.addHandler(fileLog);
         SimpleFormatter formatter = new SimpleFormatter();
         fileLog.setFormatter(formatter);
         return logger;
-    }
-    
+    }     
 }

@@ -1,10 +1,9 @@
 package com.nitherufro.proyectoprograavanzada1;
 
-import static com.nitherufro.proyectoprograavanzada1.Utilidades.FileLogger;
+import static com.nitherufro.proyectoprograavanzada1.IngresarRutTest.fileLog;
+import static com.nitherufro.proyectoprograavanzada1.Utilidades.GenerarLog;
 import static com.nitherufro.proyectoprograavanzada1.Utilidades.nombreLogger;
-import static com.nitherufro.proyectoprograavanzada1.VentaPasaje.crearLog;
 import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.junit.Test;
@@ -15,12 +14,11 @@ public class verHorariosTest {
     static String fecha = Utilidades.getTimestamp();
     static Logger registro;
 
-    static {
+    public verHorariosTest(){
         try {
-            nombreLogger = "Prueba verHorariosTest";
-            fecha = Utilidades.getTimestamp();
-            FileHandler fileLog = FileLogger();
-            registro = crearLog(fileLog);
+        nombreLogger = "Prueba verHorariosTest";
+        fileLog = Utilidades.FileLogger();
+        registro = GenerarLog(fileLog);
         } catch (IOException e) {
             e.printStackTrace();
         }
